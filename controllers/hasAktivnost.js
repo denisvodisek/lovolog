@@ -1,66 +1,60 @@
-var express = require('express')
+/*var express = require('express')
     , router = express.Router()
 const hasAktivnosti  = require('../models/hasAktivnost')
 
-router.get('/', (req, res, next) => {
-    res.json(hasAktivnosti)
+router.get('/', async (req, res, next) => {
+    try {
+        const data = await hasAktivnosti.fetchAll();
+        res.json(data);
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
     const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-        res.status(500).send(`Internal server error: ${id}`);
-    } else {
-        //console.log(isNaN(id));
-        let hasAktivnost = hasAktivnosti.hasAktivnost.find(a => a.id === id)
-        res.render('aktivnosti/hasAktivnosti', {hasAktivnost: hasAktivnost})
+    try {
+        const data = await hasAktivnosti.where({id : id}).fetch();
+        res.json(data);
+    }
+    catch (error) {
+        res.status(500).json(error);
     }
 })
 
-router.post('/', (req, res, next) => {
-    const sortId = hasAktivnosti.hasAktivnost.sort((a, b) => Number(a.id) - Number(b.id));
-    const newId = sortId[sortId.length - 1].id + 1;
-    const { idAktivnost } = req.body;
-    const { idOseba } = req.body;
-    const novHasAktivnosti = {
-        id: newId,
-        idAktivnost : idAktivnost,
-        idOseba: idOseba
-    };
-    hasAktivnosti.hasAktivnost.push(novHasAktivnosti);
-    res.json(req.body);
+router.post('/', async (req, res, next) => {
+    try {
+        const { oseba_id, aktivnost_id } = req.body;
+        const shrani = await new Aktivnosti({oseba_id, aktivnost_id}).save();
+        res.json(shrani);
+    }
+    catch (error) {
+        res.json(error);
+    }
 })
 
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
 
+    const id = parseInt(req.params.id);
+    try {
+        const data = await new hasAktivnosti({id : id}).destroy();
+        res.json(data);
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+})
+
+router.put('/:id', async (req, res, next) => {
     const id = req.params.id;
-    if (isNaN(req.params.id)) {
-        res.status(500).send(`Internal server error: ${id}`);
-    }
-    else {
-        console.log("Brišem " + id);
-
-        hasAktivnosti.hasAktivnost.forEach((hasAktivnost, index) => {
-            if (hasAktivnost.id == id) {
-                hasAktivnosti.hasAktivnost.splice(index, 1);
-            }
-        });
-        res.json(hasAktivnosti);
-    }
-})
-
-router.put('/:id', (req, res, next) => {
-    const id = req.params.id;
-    let hasAktivnost = hasAktivnosti.hasAktivnost.find((a => a.id == id));
 
     const { idAktivnost } = req.body;
     const { idOseba } = req.body;
-
-    hasAktivnost.idAktivnost = idAktivnost;
-    hasAktivnost.idOseba = idOseba;
-
-    res.send({ message: 'hasAktivnost ' + hasAktivnost.id + ' posodobljen!' });
+    const put = await new hasAktivnosti({id : id}).save({idOseba, idAktivnost});
+    res.json(put);
 })
 
 module.exports = router
+*/

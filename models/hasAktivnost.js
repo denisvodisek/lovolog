@@ -1,21 +1,22 @@
+/*
+const knexFile = require('../knexfile');
+const config = knexFile.development;
+const knex = require('knex')(config);
 
-let hasAktivnosti = {
-    hasAktivnost: [{
-        id: 1,
-        idOseba: 1,
-        idAktivnost: 2
+const bookshelf = require('bookshelf')(knex);
+bookshelf.plugin('registry');
+
+const Aktivnost = require('../models/aktivnost');
+const Oseba = require('../models/oseba');
+
+const hasAktivnosti = bookshelf.Model.extend({
+    tableName: 'hasAktivnosti',
+    oseba: function () {
+        return this.hasMany(Oseba);
     },
-        {
-            id: 2,
-            idOseba: 1,
-            idAktivnost: 1
-        },
-        {
-            id: 3,
-            idOseba: 1,
-            idAktivnost: 3
-        }
-    ]
-};
-
-module.exports = hasAktivnosti
+    aktivnost: function () {
+        return this.hasMany(Aktivnost);
+    }
+});
+*/
+//module.exports = hasAktivnosti

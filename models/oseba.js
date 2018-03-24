@@ -1,24 +1,17 @@
+const knexFile = require('../knexfile');
+const config = knexFile.development;
+const knex = require('knex')(config);
 
-let osebe = {
-    oseba: [{
-        id: 8,
-        ime: "Denis",
-        priimek: 'Vodisek',
-        vloga: "Predsednik društva"
-    },
-        {
-            id: 2,
-            ime: "Jan",
-            priimek: 'Kranjec',
-            vloga: "Podpredsednik društva"
-        },
-        {
-            id: 3,
-            ime: "Aleksej",
-            priimek: 'Miloševiš',
-            vloga: "Sniper društva"
-        }
-    ]
-};
+const bookshelf = require('bookshelf')(knex);
+bookshelf.plugin('registry');
 
-module.exports = osebe
+const Aktivnost = require('../models/aktivnost');
+
+const Oseba = bookshelf.Model.extend({
+    tableName: 'oseba',
+    aktivnost: function() {
+        return this.belongsToMany(Aktivnost);
+    }
+});
+
+module.exports = Oseba;
